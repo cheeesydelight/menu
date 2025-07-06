@@ -1,49 +1,102 @@
-# 🍕 Cheesy Delight – UI Screens Overview
+# 🍕 Cheesy Delight – QR-Based Restaurant Ordering System
 
-Welcome to the **Cheesy Delight** QR-based restaurant ordering system. This document provides a visual and functional overview of all the UI screens used in the system, categorized by user type and functionality.
-
----
-
-## 🧾 1. Customer-Facing Screens
-
-These interfaces are designed for customers to view the menu, place orders, and make payments by scanning a QR code.
-
-| Screen | Description |
-|--------|-------------|
-| `Home Screen.jpg` | Landing screen displayed after scanning the QR code. It greets the user and guides them to explore the menu. |
-| `Menu.jpg` & `Menu1.jpg` | Complete menu UI showing categories and items, including images, pricing, and options for sizes/quantities. |
-| `Order summary.jpg` | A preview screen showing selected items, their quantities, and total before proceeding to checkout. |
-| `Bill.jpg` | Displays the final bill with breakdown (item price, total amount, taxes if applicable). |
-| `Loading animation.jpg` | Engaging animation shown during transitions or while loading the order/menu. |
-
-📁 Folder: `Customer_UI/`
+A clean, mobile-first web application for cafes and restaurants that enables customers to browse the menu, place orders, and view bills—all by simply scanning a QR code. No app installation required.
 
 ---
 
-## 👨‍🍳 2. Kitchen Staff Panel
+## 🌐 Live Experience
 
-These screens help kitchen staff view incoming orders in real-time to streamline food preparation.
-
-| Screen | Description |
-|--------|-------------|
-| `Kitchen Order Panel.png` | Displays live incoming orders from customers with item details, quantities, and table or order ID. |
-
-📁 Folder: `Kitchen_UI/`
+> ⚠️ For privacy and security reasons, the live deployment link is restricted.  
+> Please contact the developer for a private walkthrough or demo access.
 
 ---
 
-## 👑 3. Owner/Admin Dashboard
+## 🚀 Project Overview
 
-This section is for restaurant owners or admins to manage backend operations and view real-time analytics.
+**Cheesy Delight** simplifies dine-in ordering with an intuitive web-based system built using:
 
-| Screen | Description |
-|--------|-------------|
-| `Owners Panel.jpg` | Admin interface showing options to manage the menu, orders, or settings. |
-| `Owners Stats.jpg` | Dashboard with sales analytics, popular items, earnings reports, and other business metrics. |
-
-📁 Folder: `Owner_UI/`
+- ✅ HTML, CSS & Vanilla JavaScript
+- 🔥 Firebase Realtime Database & Hosting
+- 📱 Mobile-first responsive layout
+- 🔐 Admin panel for managing menu and orders
+- 🧾 Customer UI with full menu, order summary, and billing
+- 👨‍🍳 Kitchen panel to manage live orders
 
 ---
 
-## ✅ Folder Structure
+## 🖥️ Application Modules
+
+### 1️⃣ Customer Interface
+
+> Designed for customers scanning a QR code at their table
+
+#### 🏠 Home Screen
+<img src="Customer_UI/Home Screen.jpg" alt="Home Screen" width="400"/>
+
+#### 📋 Menu
+<img src="Customer_UI/Menu.jpg" alt="Menu Page 1" width="400"/>  
+<img src="Customer_UI/Menu1.jpg" alt="Menu Page 2" width="400"/>
+
+#### 🛒 Order Summary
+<img src="Customer_UI/Order summary.jpg" alt="Order Summary" width="400"/>
+
+#### 💳 Final Bill
+<img src="Customer_UI/Bill.jpg" alt="Bill" width="400"/>
+
+#### ⏳ Loading Animation
+<img src="Customer_UI/Loading animation.jpg" alt="Loading Animation" width="400"/>
+
+---
+
+### 2️⃣ Kitchen Order Panel
+
+> Helps kitchen staff view and manage real-time incoming orders
+
+<img src="Kitchen_UI/Kitchen Order Panel.png" alt="Kitchen Panel" width="400"/>
+
+---
+
+### 3️⃣ Admin / Owner Dashboard
+
+> Provides the restaurant owner with control over the system
+
+#### 🔧 Owner Panel
+<img src="Owner_UI/Owners Panel.jpg" alt="Owner Panel" width="400"/>
+
+#### 📊 Stats Dashboard
+<img src="Owner_UI/Owners Stats.jpg" alt="Stats Dashboard" width="400"/>
+
+---
+
+## 📁 Folder Structure
+
+menu/
+├── Customer_UI/
+│ ├── Home Screen.jpg
+│ ├── Menu.jpg
+│ ├── Menu1.jpg
+│ ├── Order summary.jpg
+│ ├── Bill.jpg
+│ └── Loading animation.jpg
+├── Kitchen_UI/
+│ └── Kitchen Order Panel.png
+├── Owner_UI/
+│ ├── Owners Panel.jpg
+│ └── Owners Stats.jpg
+├── index.html
+├── admin.html
+├── kitchen.html
+└── README.md
+
+
+---
+
+## 💡 How It Works
+
+1. Customer scans a QR code and is taken to the menu page.
+2. They select items, view order summary, and place the order.
+3. The order reflects in the **Kitchen Panel** instantly.
+4. Admin/Owner monitors all orders and performance in real-time via Firebase.
+
+---
 
