@@ -1,59 +1,49 @@
-# Cheesy Delight - Digital Menu System 🍕
+# 🍕 Cheesy Delight – UI Screens Overview
 
-A minimal, mobile-first web-based digital menu for cafes and restaurants. Designed for seamless QR-code-based table ordering without needing any app installation.
-
----
-
-## 🌟 Key Features
-
-- 📱 Responsive and mobile-optimized UI
-- 🍕 Categorized menu (e.g. Pizzas, Burgers, Drinks)
-- 🖼️ Images for each item
-- ✏️ Admin panel to add/edit/delete items
-- 💰 Manage pricing and sizes (e.g. 7" and 10" pizzas)
-- 🔐 Firebase-backed real-time database
-- ⚙️ Editable fields: name, price, category, image URL
-- 🔍 Optimized for quick, no-fuss ordering via QR scan
+Welcome to the **Cheesy Delight** QR-based restaurant ordering system. This document provides a visual and functional overview of all the UI screens used in the system, categorized by user type and functionality.
 
 ---
 
-## 💡 How It Works
+## 🧾 1. Customer-Facing Screens
 
-1. Admin can manage menu items directly from the panel.
-2. Users scan a QR code at their table and browse the live menu.
-3. All changes made in the backend reflect instantly on the customer view.
+These interfaces are designed for customers to view the menu, place orders, and make payments by scanning a QR code.
 
----
+| Screen | Description |
+|--------|-------------|
+| `Home Screen.jpg` | Landing screen displayed after scanning the QR code. It greets the user and guides them to explore the menu. |
+| `Menu.jpg` & `Menu1.jpg` | Complete menu UI showing categories and items, including images, pricing, and options for sizes/quantities. |
+| `Order summary.jpg` | A preview screen showing selected items, their quantities, and total before proceeding to checkout. |
+| `Bill.jpg` | Displays the final bill with breakdown (item price, total amount, taxes if applicable). |
+| `Loading animation.jpg` | Engaging animation shown during transitions or while loading the order/menu. |
 
-## 🔧 Tech Stack
-
-- **Frontend**: HTML, CSS, JavaScript (Vanilla)
-- **Backend/DB**: Firebase Realtime Database
-- **Hosting**: Firebase Hosting
-- **Design Philosophy**: Minimal, intuitive, no-login required for customers
-
----
-
-## 🔐 Access
-
-> 🔒 Live ordering link is restricted to preserve privacy and prevent misuse.  
-> Demo access available upon request.
+📁 Folder: `Customer_UI/`
 
 ---
 
-## 📷 Screenshots
+## 👨‍🍳 2. Kitchen Staff Panel
 
-Coming soon!
+These screens help kitchen staff view incoming orders in real-time to streamline food preparation.
+
+| Screen | Description |
+|--------|-------------|
+| `Kitchen Order Panel.png` | Displays live incoming orders from customers with item details, quantities, and table or order ID. |
+
+📁 Folder: `Kitchen_UI/`
 
 ---
 
-## 🤝 Contributing
+## 👑 3. Owner/Admin Dashboard
 
-Contributions are welcome! If you'd like to suggest a feature or fix a bug, feel free to fork and open a pull request.
+This section is for restaurant owners or admins to manage backend operations and view real-time analytics.
+
+| Screen | Description |
+|--------|-------------|
+| `Owners Panel.jpg` | Admin interface showing options to manage the menu, orders, or settings. |
+| `Owners Stats.jpg` | Dashboard with sales analytics, popular items, earnings reports, and other business metrics. |
+
+📁 Folder: `Owner_UI/`
 
 ---
 
-## 📬 Contact
-
-If you're a café/restaurant owner or enthusiast and would like a similar QR-powered menu system, feel free to connect with me.
+## ✅ Folder Structure
 
