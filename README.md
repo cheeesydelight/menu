@@ -38,13 +38,13 @@ A clean, mobile-first web application for cafes and restaurants that enables cus
 <img src="Customer_UI/Menu1.jpg" alt="Menu Page 2" width="400"/>
 
 #### 🛒 Order Summary
-<img src="Customer_UI/Order summary.jpg" alt="Order Summary" width="400"/>
+<img src="Customer_UI/order summary.jpg" alt="Order Summary" width="400"/>
 
 #### 💳 Final Bill
 <img src="Customer_UI/Bill.jpg" alt="Bill" width="400"/>
 
 #### ⏳ Loading Animation
-<img src="Customer_UI/Loading animation.jpg" alt="Loading Animation" width="400"/>
+<img src="Customer_UI/Loading animation .jpg" alt="Loading Animation" width="400"/>
 
 ---
 
