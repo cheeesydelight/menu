@@ -1,9 +1,9 @@
 /* 🎨 Font System & Sizing */
 :root {
-  --font-heading: 'Poppins', sans-serif;
-  --font-body: 'Quicksand', sans-serif;
-  --font-accent: 'Nunito', sans-serif;
-  --font-brand: 'Pacifico', cursive;
+  --font-heading: "Poppins", sans-serif;
+  --font-body: "Quicksand", sans-serif;
+  --font-accent: "Nunito", sans-serif;
+  --font-brand: "Pacifico", cursive;
 
   --font-size-xs: 13px;
   --font-size-sm: 15px;
@@ -35,6 +35,7 @@ body {
   background-color: #fdfdfd;
   line-height: 1.6;
   color: #222;
+  scroll-behavior: smooth;
 }
 
 body,
@@ -45,14 +46,16 @@ textarea {
   font-family: var(--font-body);
 }
 
-/* Logo */
 .logo-wrapper {
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 20px; /* Push down below sticky header */
+  z-index: 1001; /* Higher than sticky-header (1000) */
+  transition: opacity 0.3s ease;
+  position: relative; /* Ensure it respects z-index */
 }
 
 .logo {
-  width: 220px;
+  width: 120px;
   max-width: 90%;
   height: auto;
   object-fit: contain;
@@ -62,8 +65,8 @@ textarea {
 /* Container */
 .container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
+  margin-top: 15px;
+  padding: 90px 16px 20px; /* Increased top padding to account for sticky header */
   background: white;
   border-radius: var(--radius-lg);
   border: 1px solid #ececec;
@@ -118,7 +121,8 @@ h3 {
   align-items: center;
   min-height: 320px;
   border: 1px solid #f0f0f0;
-  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
   transition: box-shadow 0.2s ease;
 }
 
@@ -139,13 +143,12 @@ h3 {
 .menu-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;  
-  align-items: center;      
+  justify-content: center;
+  align-items: center;
   flex-grow: 1;
   text-align: center;
   padding: 8px 0;
 }
-
 
 .menu-info p {
   font-size: var(--font-size-sm);
@@ -254,7 +257,7 @@ h3 {
   margin-bottom: 6px;
 }
 
-.combo-images>div {
+.combo-images > div {
   text-align: center;
   width: 100px;
 }
@@ -266,7 +269,8 @@ h3 {
   background: #fefefe;
   border-radius: var(--radius-lg);
   border: 1px solid #e0e0e0;
-  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
 #cart h2 {
@@ -382,7 +386,8 @@ h3 {
   right: 0;
   background: white;
   border-top: 1px solid #ddd;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -457,7 +462,7 @@ h3 {
     font-size: 14px;
   }
 
-  .combo-images>div {
+  .combo-images > div {
     width: 48%;
   }
 
@@ -473,9 +478,234 @@ h3 {
   }
 }
 .control-box {
-  min-height: 50px;  /* enough space for either ADD or +− controls */
+  min-height: 50px; /* enough space for either ADD or +− controls */
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 8px;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  top: 56px; /* Keep this for positioning below search bar */
+  z-index: 997;
+  background-color: white;
+  padding: 10px 12px 14px;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+  white-space: nowrap;
+  /* Add min-height to ensure text is visible */
+  min-height: 90px; /* Increased to accommodate image and text */
+}
+
+.categories::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.category:hover {
+  transform: scale(1.05);
+}
+
+.category-image-container {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 6px;
+  background-color: #fff;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  text-transform: capitalize;
+  font-family: var(--font-body);
+}
+
+.category.active .category-image-container {
+  border: 2px solid #ff5722;
+}
+
+/* Prevent headings from being hidden behind sticky bar */
+.menu-category {
+  scroll-margin-top: 100px;
+}
+
+.search-header {
+  background-color: white;
+  padding: 10px 16px;
+  margin: 0px;
+  z-index: 9;
+}
+
+.search-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background-color: #f9f9f9;
+  gap: 10px;
+}
+
+.search-icon {
+  stroke: #555;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: var(--font-body);
+  background: transparent;
+}
+
+.close-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.search-results {
+  position: fixed;
+  top: 60px; /* BELOW your sticky header */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 999;
+  overflow-y: auto;
+  padding: 16px;
+  display: none;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.search-result-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.search-result-item .menu-image-box {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+.search-result-item .menu-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.search-result-item .menu-info {
+  flex: 1;
+  text-align: left;
+  padding: 0;
+}
+
+.search-result-item .menu-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.search-result-item .menu-info p strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+}
+
+.search-result-item .price {
+  font-family: var(--font-accent);
+  font-size: 14px;
+  color: #ff5722;
+  font-weight: 600;
+}
+
+.empty-menu-msg {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  padding: 30px 16px;
+  border: 1px dashed #eee;
+  border-radius: var(--radius-md);
+  margin: 20px auto;
+  max-width: 300px;
+  background: #fafafa;
+}
+
+.hide-when-searching {
+  display: none !important;
+}
+
+/* Sticky Header Wrapper for Search + Category */
+.search-header {
+  width: 100%;
+  top: 0; /* Sticks to top */
+  z-index: 998;
+  background-color: white;
+  padding: 10px 16px;
+  margin: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Remove margin-top on search-header if needed */
+.search-header {
+  padding: 10px 16px;
+}
+
+.sticky-header {
+  position: relative;
+  background-color: white;
+  max-height: 70px;
+  transition: all 0.3s;
+}
+
+.sticky-header.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }

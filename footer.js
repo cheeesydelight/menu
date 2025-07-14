@@ -1,4 +1,4 @@
-document.getElementById('footer-container').innerHTML = `
+document.getElementById("footer-container").innerHTML = `
   <footer class="site-footer">
     <p>&copy; <span id="year"></span> <strong>cyberpeshwas</strong> · All rights reserved</p>
     <p>📞 <a href="tel:+918087408986">+91 80874 08986</a> |

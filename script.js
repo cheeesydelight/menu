@@ -216,8 +216,77 @@ function loadMenu() {
         }
       }
     });
+    renderCategoryBar(menu);
   });
 }
+
+function renderCategoryBar(menu) {
+  const bar = document.getElementById('category-bar');
+  bar.innerHTML = '';
+
+  const desiredOrder = [
+    'starters', 'drinks', 'mocktails', 'tea-ice-tea', 'soup', 'salad',
+    'sandwich', 'burger', 'fries', 'pizza', 'pasta', 'noodles',
+    'rice-noodles', 'maggi', 'momos', 'indian-menu', 'main-course',
+    'combos', 'special-offers', 'sizzlers', 'breads-toast',
+    'twisto-cold-coffee-choco-cad', 'choco-cad', 'shake-smoothies',
+    'brownies', 'desserts', 'filled-toastie', 'nachos', 'hot-coffee',
+    'beverages', 'fasting', 'chinese-starter', 'fresh-lemon', 'papad'
+  ];
+
+  const actualCategories = Object.keys(menu);
+  const orderedCategories = [
+    ...desiredOrder.filter(cat => actualCategories.includes(cat)),
+    ...actualCategories.filter(cat => !desiredOrder.includes(cat))
+  ];
+
+  orderedCategories.forEach(cat => {
+    const catData = menu[cat];
+    if (!catData) return;
+
+    const firstItem = Object.values(catData)[0];
+    const image = firstItem?.image || '/img/default_category.png';
+    const catName = cat.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    const div = document.createElement('div');
+    div.className = 'category';
+    div.setAttribute('data-id', cat);
+
+    // ✅ Scroll logic
+    div.onclick = () => {
+      const target = document.getElementById(cat);
+      if (!target) return;
+
+      // The heading we want to scroll into view
+      const heading = target.querySelector('h2') || target;
+
+      // Measure total sticky header height
+      const stickyHeader = document.querySelector('.sticky-header');
+      const headerHeight = stickyHeader ? stickyHeader.offsetHeight : 0;
+
+      // Add a small padding buffer
+      const buffer = 190;
+
+      // Where to scroll
+      const scrollY = heading.getBoundingClientRect().top + window.scrollY - headerHeight - buffer;
+
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: scrollY, behavior: 'smooth' });
+      });
+    };
+
+
+    // ✅ Build HTML and append
+    div.innerHTML = `
+      <div class="category-image-container">
+        <img src="${image}" alt="${catName}" class="category-image" />
+      </div>
+      <div class="category-name text-capitalise">${catName}</div>
+    `;
+    bar.appendChild(div);
+  });
+}
+
 
 function orderNow() {
   if (!cart.length) return;
@@ -331,6 +400,99 @@ function listenForKitchenUpdate() {
     }
   });
 }
+
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+const closeIcon = document.querySelector('.close-icon');
+
+// Search all items when typing
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.trim().toLowerCase();
+  if (!query) {
+    searchResults.style.display = 'none';
+    closeIcon.style.display = 'none';
+    searchResults.innerHTML = '';
+    return;
+  }
+
+  closeIcon.style.display = 'inline-block';
+
+  // search through Firebase-loaded menu
+  db.ref("menu").once("value").then(snapshot => {
+    const menu = snapshot.val();
+    if (!menu) return;
+
+    const matches = [];
+    for (const cat in menu) {
+      const items = menu[cat];
+      for (const id in items) {
+        const item = items[id];
+        if (item.name && item.name.toLowerCase().includes(query)) {
+          matches.push({ ...item, id, category: cat });
+        }
+      }
+    }
+
+    if (matches.length === 0) {
+      searchResults.innerHTML = `<div class="empty-menu-msg">No items found</div>`;
+    } else {
+      searchResults.innerHTML = matches.map(item => {
+        let priceDisplay = '';
+
+        if (item.type === 'pizza' || item.type === 'noodles') {
+          priceDisplay = `<p class="price">Tap to view options</p>`;
+        } else {
+          priceDisplay = `<p class="price">₹${item.price ?? 'N/A'}</p>`;
+        }
+
+        return `
+    <div class="search-result-item" onclick="goToMenuItem('${item.id}')">
+      <div class="menu-image-box">
+        <img src="${item.image || 'https://via.placeholder.com/100'}" alt="${item.name}" />
+      </div>
+      <div class="menu-info">
+        <p><strong>${item.name}</strong></p>
+        ${priceDisplay}
+      </div>
+    </div>
+  `;
+      }).join('');
+      searchResults.style.display = 'block';
+      document.body.style.overflow = 'hidden';  // Disable background scroll
+      document.getElementById('category-bar').classList.add('hide-when-searching');
+    }
+  });
+});
+
+// Clear search
+function clearSearch() {
+  searchInput.value = '';
+  searchResults.innerHTML = '';
+  searchResults.style.display = 'none';
+  closeIcon.style.display = 'none';
+  document.body.style.overflow = ''; // Re-enable scroll
+  document.getElementById('category-bar').classList.remove('hide-when-searching');
+}
+
+function goToMenuItem(itemId) {
+  clearSearch();
+  const target = document.getElementById(`menu-${itemId}`);
+  if (target) {
+    const stickyHeader = document.querySelector('.sticky-header');
+    const categoriesBar = document.getElementById('category-bar');
+
+    const headerHeight = stickyHeader ? stickyHeader.offsetHeight : 0;
+    const categoryHeight = categoriesBar ? categoriesBar.offsetHeight : 0;
+    const buffer = 16;
+
+    const totalOffset = headerHeight + categoryHeight + buffer;
+
+    const y = target.getBoundingClientRect().top + window.scrollY - totalOffset;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
 
 // ✅ Init
 document.addEventListener('DOMContentLoaded', () => {
