@@ -378,6 +378,63 @@ if (searchInput) {
   });
 }
 
+function loadActivePromo() {
+  db.ref("promo")
+    .once("value")
+    .then((snap) => {
+      const promo = snap.val();
+      if (!promo) return;
+
+      const img = document.createElement("img");
+      img.src = promo.image;
+      img.style = "max-width:200px;margin-top:10px;border-radius:8px;";
+
+      const info = document.createElement("p");
+      info.innerHTML = `Current Promo: <strong>${promo.discount}% OFF</strong>`;
+
+      const container = document.getElementById("active-promo-preview");
+      container.innerHTML = "";
+      container.appendChild(img);
+      container.appendChild(info);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadActivePromo(); // 👈 Load promo on admin panel load
+});
+
+document
+  .getElementById("save-promo-btn")
+  .addEventListener("click", async () => {
+    const imageUrl = document.getElementById("promo-image-url").value.trim();
+    const discount = parseFloat(
+      document.getElementById("promo-discount").value
+    );
+
+    if (!imageUrl || isNaN(discount) || discount < 0 || discount > 100) {
+      return alert("Please enter a valid image URL and discount (0–100)");
+    }
+
+    await db.ref("promo").set({ image: imageUrl, discount });
+
+    M.toast({ html: "Promo saved!", classes: "green" });
+  });
+
+document
+  .getElementById("delete-promo-btn")
+  .addEventListener("click", async () => {
+    const confirmDelete = confirm(
+      "Are you sure you want to remove the current promo?"
+    );
+    if (!confirmDelete) return;
+
+    await db.ref("promo").remove();
+    M.toast({ html: "Promo deleted", classes: "red" });
+
+    document.getElementById("promo-image-url").value = "";
+    document.getElementById("promo-discount").value = "";
+  });
+
 // ✅ Init
 document.addEventListener("DOMContentLoaded", () => {
   M.AutoInit();

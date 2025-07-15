@@ -12,6 +12,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+window.currentPromo = null;
+
+// 🔁 Watch promo updates from DB
+db.ref("promo").on("value", (snap) => {
+  window.currentPromo = snap.val();
+});
+
 const tableBody = document.getElementById("orders-table-body");
 const totalSalesDiv = document.getElementById("total-sales");
 
@@ -37,6 +44,15 @@ function renderOrder(orderId, order) {
     .map((i) => `${i.name || "Item"} × ${i.qty || 1}`)
     .join(", ");
 
+  let totalCell = `₹${order.total || 0}`;
+
+  // ✅ Check if order had a promo when placed
+  if (order.promo?.discount && order.total) {
+    const discount = order.promo.discount;
+    const discounted = Math.round(order.total * (1 - discount / 100));
+    totalCell += `<br><small style="color:#ff5722;font-weight:bold;">🎉 ${discount}% OFF → ₹${discounted}</small>`;
+  }
+
   row.innerHTML = `
     <td>${orderId}</td>
     <td>${order.name || "-"}</td>
@@ -45,7 +61,7 @@ function renderOrder(orderId, order) {
     order.status || "-"
   }</span></td>
     <td>${itemList}</td>
-    <td>₹${order.total || 0}</td>
+    <td>${totalCell}</td>
     <td>${formatDate(order.timestamp)}</td>
   `;
 
@@ -63,7 +79,11 @@ function loadOrders() {
       renderOrder(id, order);
 
       if (order.status === "done") {
-        totalSales += Number(order.total) || 0;
+        let base = Number(order.total) || 0;
+        if (order.promo?.discount) {
+          base = Math.round(base * (1 - order.promo.discount / 100));
+        }
+        totalSales += base;
       }
     });
 

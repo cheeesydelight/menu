@@ -13,6 +13,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// ✅ Global Promo Holder
+window.currentPromo = null;
+
+// ✅ Now it's safe to use db
+db.ref("promo").on("value", (snap) => {
+  window.currentPromo = snap.val();
+});
+
 // ✅ DOM Elements
 const ordersDiv = document.getElementById("orders");
 const kitchenSound = document.getElementById("kitchenSound");
@@ -44,6 +52,19 @@ function renderOrder(orderId, orderData, latestUpdate = null) {
     `;
   }
 
+  // 🧠 Calculate discount if promo exists
+  let discountInfo = "";
+  if (window.currentPromo?.discount) {
+    const discount = window.currentPromo.discount;
+    const discountedTotal = Math.round(orderData.total * (1 - discount / 100));
+    discountInfo = `
+      <p>
+        <strong>🎉 Promo Applied:</strong> ${discount}% OFF
+        <br><strong>Final Total:</strong> ₹${discountedTotal}
+      </p>
+    `;
+  }
+
   card.innerHTML = `
     <h5>Order #${orderId}</h5>
     <p><strong>Name:</strong> ${orderData.name}</p>
@@ -51,6 +72,7 @@ function renderOrder(orderId, orderData, latestUpdate = null) {
     <ul>${itemsHTML}</ul>
     ${updatesHTML}
     <p><strong>Total:</strong> ₹${orderData.total}</p>
+    ${discountInfo}
     <p><strong>Time:</strong> ${new Date(
       orderData.timestamp
     ).toLocaleString()}</p>

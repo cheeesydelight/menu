@@ -206,6 +206,64 @@
 
       <!-- Menu Content -->
       <div class="container">
+        <!-- Promo Notification Popup -->
+        <div
+          id="promo-overlay"
+          style="
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div
+            id="promo-toast"
+            style="
+              background: #fffde7;
+              padding: 28px 32px;
+              border-radius: 18px;
+              box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+              text-align: center;
+              max-width: 400px;
+              width: 90%;
+              position: relative;
+              animation: popIn 0.4s ease-out;
+              cursor: pointer;
+            "
+          >
+            <img
+              id="promo-toast-img"
+              src=""
+              style="max-width: 100%; border-radius: 12px; margin-bottom: 16px"
+            />
+            <h5
+              style="color: #d84315; font-weight: bold"
+              id="promo-toast-msg"
+            ></h5>
+            <p style="color: #555">Tap anywhere to dismiss</p>
+          </div>
+        </div>
+
+        <style>
+          @keyframes popIn {
+            from {
+              opacity: 0;
+              transform: scale(0.9);
+            }
+            to {
+              opacity: 1;
+              transform: scale(1);
+            }
+          }
+        </style>
+
         <div id="menu-section">
           <!-- Menu categories will be injected here -->
         </div>
@@ -215,6 +273,10 @@
           <h2>Your Order</h2>
           <ul id="cart-items"></ul>
           <p>Total: ₹<span id="total">0</span></p>
+          <p
+            id="discount-line"
+            style="color: #ff5722; font-weight: bold; display: none"
+          ></p>
 
           <div class="cart-actions">
             <button id="order-btn" disabled>🛎️ Order</button>
