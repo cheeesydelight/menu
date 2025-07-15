@@ -1,169 +1,166 @@
+<!-- Save as admin.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cheeesy Delight – Admin Panel</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link rel="icon" type="image/png" href="logo.png" />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #fefefe;
-        padding-bottom: 60px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheeesy Delight – Admin Panel</title>
 
-      h4.section-title {
-        margin-top: 40px;
-        margin-bottom: 20px;
-        color: #ff5722;
-        font-weight: 600;
-        text-align: center;
-      }
+  <!-- Materialize & Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="logo.png" />
 
-      .input-field input,
-      .input-field select {
-        border-radius: 6px;
-        border: 1px solid #ddd;
-        padding: 8px;
-        font-size: 14px;
-      }
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #fafafa;
+    }
 
-      .card {
-        margin-bottom: 32px;
-        padding: 24px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      }
+    .section-title {
+      text-align: center;
+      font-weight: 600;
+      color: #ff5722;
+      margin: 30px 0 20px;
+    }
 
-      .btn {
-        border-radius: 6px;
-      }
+    .collapsible-header {
+      font-weight: 600;
+      color: #ff5722;
+    }
 
-      #menu-items .menu-card {
-        margin-bottom: 16px;
-      }
+    .input-field input,
+    .input-field select {
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
 
-      footer {
-        margin-top: 40px;
-        text-align: center;
-        color: #888;
-        font-size: 14px;
-      }
+    .card-content {
+      padding-top: 0;
+    }
 
-      .section-divider {
-        margin-top: 60px;
-        border-top: 1px solid #eee;
-        margin-bottom: 30px;
-      }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
 
-      label {
-        font-size: 14px;
-      }
+    .menu-wrapper .menu-card {
+      margin-bottom: 16px;
+    }
 
-      #active-promo-preview img {
-        max-width: 100%;
-        border-radius: 10px;
-        margin-bottom: 8px;
-      }
-    </style>
+    .combo-option img {
+      border-radius: 6px;
+    }
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script defer src="admin.js"></script>
-  </head>
+    #active-promo-preview img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+  </style>
 
-  <body class="container">
-    <h4 class="section-title">Cheeesy Delight – Admin Panel</h4>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
+  <script defer src="admin.js"></script>
+</head>
+
+<body class="container">
+  <h4 class="section-title">Cheeesy Delight – Admin Panel</h4>
+
+  <!-- Collapsible Sections -->
+  <ul class="collapsible">
     <!-- Menu Item Manager -->
-    <div class="card">
-      <h5 class="orange-text">Add / Edit Menu Item</h5>
-      <form id="menu-form">
-        <div class="input-field">
-          <input id="item-name" type="text" required />
-          <label for="item-name">Item Name</label>
-        </div>
-
-        <div class="input-field">
-          <select id="item-category" class="browser-default" required>
-            <option value="" disabled selected>Select Category</option>
-            <option value="starters">Starters</option>
-            <option value="main-course">Main Course</option>
-            <option value="desserts">Desserts</option>
-            <option value="drinks">Drinks</option>
-            <option value="pizzas">Pizzas</option>
-            <option value="noodles">Noodles</option>
-            <option value="momos">Momos</option>
-            <option value="maggi">Maggi</option>
-            <option value="rice-bowls">Rice Bowls</option>
-            <option value="special-offers">Special Offers</option>
-            <option value="fasting">Fasting</option>
-          </select>
-        </div>
-
-        <div id="price-wrapper" class="input-field">
-          <input type="number" id="item-price" />
-          <label for="item-price">Price (₹)</label>
-        </div>
-
-        <div id="pizza-wrapper" style="display: none">
+    <li class="active">
+      <div class="collapsible-header">🍽 Add / Edit Menu Item</div>
+      <div class="collapsible-body">
+        <form id="menu-form">
           <div class="input-field">
-            <input type="number" id="pizza-price-7" />
-            <label for="pizza-price-7">Price for 7" (₹)</label>
+            <input id="item-name" type="text" required />
+            <label for="item-name">Item Name</label>
           </div>
-          <div class="input-field">
-            <input type="number" id="pizza-price-10" />
-            <label for="pizza-price-10">Price for 10" (₹)</label>
-          </div>
-        </div>
 
-        <div id="noodle-wrapper" style="display: none">
           <div class="input-field">
-            <input type="number" id="noodle-price-half" />
-            <label for="noodle-price-half">Price for Half (₹)</label>
+            <select id="item-category" class="browser-default" required>
+              <option value="" disabled selected>Select Category</option>
+              <optgroup label="Meals">
+                <option value="main-course">Main Course</option>
+                <option value="noodles">Noodles</option>
+                <option value="rice-bowls">Rice Bowls</option>
+                <option value="fasting">Fasting</option>
+              </optgroup>
+              <optgroup label="Snacks & Sides">
+                <option value="starters">Starters</option>
+                <option value="momos">Momos</option>
+                <option value="maggi">Maggi</option>
+              </optgroup>
+              <optgroup label="Beverages & Desserts">
+                <option value="drinks">Drinks</option>
+                <option value="desserts">Desserts</option>
+              </optgroup>
+              <optgroup label="Specials">
+                <option value="pizzas">Pizzas</option>
+                <option value="special-offers">Special Offers</option>
+              </optgroup>
+            </select>
           </div>
+
+          <div id="price-wrapper" class="input-field">
+            <input type="number" id="item-price" />
+            <label for="item-price">Price (₹)</label>
+          </div>
+
+          <div id="pizza-wrapper" style="display: none;">
+            <div class="input-field">
+              <input type="number" id="pizza-price-7" />
+              <label for="pizza-price-7">Price for 7" (₹)</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="pizza-price-10" />
+              <label for="pizza-price-10">Price for 10" (₹)</label>
+            </div>
+          </div>
+
+          <div id="noodle-wrapper" style="display: none;">
+            <div class="input-field">
+              <input type="number" id="noodle-price-half" />
+              <label for="noodle-price-half">Price for Half (₹)</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="noodle-price-full" />
+              <label for="noodle-price-full">Price for Full (₹)</label>
+            </div>
+          </div>
+
           <div class="input-field">
-            <input type="number" id="noodle-price-full" />
-            <label for="noodle-price-full">Price for Full (₹)</label>
+            <input type="url" id="item-image-url" required />
+            <label for="item-image-url">Image URL</label>
           </div>
-        </div>
 
-        <div class="input-field">
-          <input type="url" id="item-image-url" required />
-          <label for="item-image-url">Image URL</label>
-        </div>
-
-        <button class="btn orange" type="submit">
-          Save Item <i class="material-icons right">check</i>
-        </button>
-      </form>
-    </div>
+          <button class="btn orange" type="submit">
+            Save Item <i class="material-icons right">check</i>
+          </button>
+        </form>
+      </div>
+    </li>
 
     <!-- Combo Builder -->
-    <div class="card">
-      <h5 class="orange-text">🥡 Build Combo</h5>
-      <div class="input-field">
-        <input type="text" id="combo-name" required />
-        <label for="combo-name">Combo Name</label>
-      </div>
-      <div class="input-field">
-        <input type="number" id="combo-price" required />
-        <label for="combo-price">Total Price (₹)</label>
-      </div>
-      <div>
+    <li>
+      <div class="collapsible-header">🥡 Build Combo</div>
+      <div class="collapsible-body">
+        <div class="input-field">
+          <input type="text" id="combo-name" required />
+          <label for="combo-name">Combo Name</label>
+        </div>
+        <div class="input-field">
+          <input type="number" id="combo-price" required />
+          <label for="combo-price">Total Price (₹)</label>
+        </div>
         <p><strong>Select Recipes:</strong></p>
         <p id="combo-selection-count">Selected: 0</p>
         <div
@@ -171,54 +168,55 @@
           class="row"
           style="max-height: 320px; overflow-y: auto"
         ></div>
+        <button class="btn orange" id="save-combo-btn">
+          Save Combo <i class="material-icons right">add</i>
+        </button>
       </div>
-      <button class="btn orange" id="save-combo-btn">
-        Save Combo <i class="material-icons right">add</i>
-      </button>
-    </div>
+    </li>
 
-    <!-- Promo Section -->
-    <div class="card">
-      <h5 class="orange-text">🎉 Promo Notification</h5>
-      <div id="active-promo-preview" class="center-align"></div>
-      <div class="input-field">
-        <input type="url" id="promo-image-url" required />
-        <label for="promo-image-url">Promo Image URL</label>
-      </div>
-      <div class="input-field">
-        <input type="number" id="promo-discount" min="0" max="100" required />
-        <label for="promo-discount">Discount Percentage</label>
-      </div>
-      <div class="row">
-        <div class="col s12 m6">
-          <button class="btn orange" id="save-promo-btn" style="width: 100%">
-            Save Promo <i class="material-icons right">campaign</i>
-          </button>
+    <!-- Promo Settings -->
+    <li>
+      <div class="collapsible-header">🎉 Promo Notification</div>
+      <div class="collapsible-body">
+        <div id="active-promo-preview" class="center-align"></div>
+        <div class="input-field">
+          <input type="url" id="promo-image-url" required />
+          <label for="promo-image-url">Promo Image URL</label>
         </div>
-        <div class="col s12 m6">
-          <button class="btn red" id="delete-promo-btn" style="width: 100%">
-            Delete Promo <i class="material-icons right">delete</i>
-          </button>
+        <div class="input-field">
+          <input type="number" id="promo-discount" min="0" max="100" required />
+          <label for="promo-discount">Discount Percentage</label>
+        </div>
+        <div class="row">
+          <div class="col s12 m6">
+            <button class="btn orange" id="save-promo-btn" style="width: 100%">
+              Save Promo <i class="material-icons right">campaign</i>
+            </button>
+          </div>
+          <div class="col s12 m6" style="margin-top: 12px;">
+            <button class="btn red" id="delete-promo-btn" style="width: 100%">
+              Delete Promo <i class="material-icons right">delete</i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </li>
+  </ul>
 
-    <!-- Menu List -->
-    <div id="menu-items" class="menu-wrapper"></div>
+  <!-- Menu Cards -->
+  <div id="menu-items" class="menu-wrapper"></div>
 
-    <!-- Footer -->
-    <footer>
-      &copy; <span id="year"></span> Cheeesy Delight · Crafted with ❤️ by
-      cyberpeshwas
-    </footer>
+  <footer>
+    &copy; <span id="year"></span> Cheeesy Delight · Crafted with ❤️ by cyberpeshwas
+  </footer>
 
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        M.AutoInit();
-        document.getElementById("year").textContent = new Date().getFullYear();
-      });
-    </script>
-  </body>
+  <!-- Materialize Init -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      M.AutoInit();
+      document.getElementById("year").textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
 </html>
