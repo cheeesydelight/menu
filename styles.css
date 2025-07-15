@@ -54,6 +54,10 @@ textarea {
   position: relative; /* Ensure it respects z-index */
 }
 
+.hide-during-search {
+  display: none !important;
+}
+
 .logo {
   width: 120px;
   max-width: 90%;
