@@ -437,59 +437,78 @@ function checkout() {
         return;
       }
 
-      try {
-        const dateStr = new Date(order.timestamp).toLocaleString();
-        let receipt = `      Cheeesy Delight\n-----------------------------\n`;
-        receipt += `Name: ${order.name}\nTable: ${order.table}\nDate: ${dateStr}\n-----------------------------\n`;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
 
-        let subtotal = 0;
-        order.items.forEach((item) => {
-          const lineTotal = item.price * item.qty;
-          receipt += `${item.name.padEnd(16)} ₹${item.price} × ${
-            item.qty
-          } = ₹${lineTotal}\n`;
-          subtotal += lineTotal;
-        });
+      const subtotal = order.items.reduce(
+        (sum, item) => sum + item.price * item.qty,
+        0
+      );
+      const discount = order.promo?.discount || 0;
+      const finalTotal = Math.round(subtotal * (1 - discount / 100));
 
-        let discount = promo?.discount || 0;
-        let finalTotal = Math.round(subtotal * (1 - discount / 100));
+      // Header Info
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("CHEESY DELIGHT", 105, 15, { align: "center" });
 
-        receipt += `-----------------------------\n`;
-        if (discount > 0) {
-          receipt += `Subtotal: ₹${subtotal}\nDiscount: ${discount}%\n`;
-        }
-        receipt += `TOTAL: ₹${finalTotal}\n-----------------------------\n      Thank you! Visit again`;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Name: ${order.name}`, 14, 25);
+      doc.text(`Table: ${order.table || "-"}`, 100, 25);
+      doc.text(`Date: ${new Date(order.timestamp).toLocaleString()}`, 14, 31);
 
-        const receiptDiv = document.createElement("div");
-        receiptDiv.style.position = "absolute";
-        receiptDiv.style.left = "-9999px";
-        receiptDiv.style.top = "0";
-        receiptDiv.style.padding = "20px";
-        receiptDiv.style.fontFamily = "monospace";
-        receiptDiv.style.whiteSpace = "pre-wrap";
-        receiptDiv.style.fontSize = "12px";
-        receiptDiv.style.width = "250px";
-        receiptDiv.innerText = receipt;
-        document.body.appendChild(receiptDiv);
+      // Item Table
+      const tableData = order.items.map((item) => [
+        item.name,
+        item.qty,
+        `₹${item.price}`,
+        `₹${item.price * item.qty}`,
+      ]);
 
-        html2canvas(receiptDiv).then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const { jsPDF } = window.jspdf; // fixed
-          const pdf = new jsPDF({
-            orientation: "portrait",
-            unit: "px",
-            format: [260, 400],
-          });
-          pdf.addImage(imgData, "PNG", 5, 5, 250, 360);
-          pdf.save(`Cheesy_Delight_Receipt_${sessionId}.pdf`);
-          document.body.removeChild(receiptDiv);
-          localStorage.clear();
-          setTimeout(() => (window.location.href = "index.html"), 2000);
-        });
-      } catch (err) {
-        console.error("Error generating receipt:", err);
-        showToast("❌ Error generating receipt");
+      doc.autoTable({
+        startY: 35,
+        head: [["Item", "Qty", "Rate", "Total"]],
+        body: order.items.map((item) => [
+          item.name,
+          item.qty,
+          `Rs. ${item.price}`,
+          `Rs. ${item.price * item.qty}`,
+        ]),
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [240, 240, 240], textColor: 20 },
+        theme: "grid", // optional
+        columnStyles: {
+          1: { halign: "center" },
+          2: { halign: "right" },
+          3: { halign: "right" },
+        },
+      });
+
+      // Totals
+      const endY = doc.lastAutoTable.finalY + 10;
+      doc.setFontSize(10);
+      doc.text(`Subtotal: Rs.${subtotal}`, 130, endY);
+      if (discount > 0) {
+        doc.text(`Discount: ${discount}%`, 130, endY + 6);
+        doc.text(`Final Total: Rs.${finalTotal}`, 130, endY + 12);
+      } else {
+        doc.text(`Total: Rs.${finalTotal}`, 130, endY + 6);
       }
+
+      // Footer
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("Thank you! Visit again.", 105, endY + 25, { align: "center" });
+
+      // Save
+      doc.save(`Cheesy_Delight_Receipt_${order.orderId}.pdf`);
+      localStorage.clear();
+      setTimeout(() => (window.location.href = "index.html"), 2000);
     })
     .catch((err) => {
       console.error("Firebase fetch error:", err);
